@@ -1,3 +1,4 @@
+//Назначаємо змінну, яка по дефолту, або парсить масив із LS, якщо такий є, або повертає порожній масив, якщо LS порожній
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let cartItemsElement = document.querySelector('.cart-items');
 let cartContentElement = document.querySelector('.cartContent');
@@ -12,21 +13,25 @@ function showAll() {
     fetch('https://fakestoreapi.com/products')
         .then(data => data.json())
         .then(data => {
+            //Викликаємо функцію render() із аргументом (data), щоб виконати перебор саме для цього масиву
             render(data)
         })
 }
 
 showAll()
 
+//Функція, яка рендерить у main всі картки, за допомогою метода .map ми проходимось по всьому масиву, 
+//20 разів, по кожному окремому item (елементу/об'єкту масиву)
 function render(data) {
     let main = document.querySelector('.main');
     main.innerHTML = '';
     data.map(item => {
-        let div = createItem(item);
-        main.append(div);
+        main.append(createItem(item));
     });
 }
 
+//Функція створення картки 
+//Параметром приймаємо (item), щоб вище витягувати цей айтем із data
 function createItem(item) {
     let div = document.createElement('div');
     div.classList.add('card');
@@ -67,18 +72,19 @@ function createItem(item) {
     return div;
 }
 
-console.log(cart);
-
 function addToCart(item) {
     cart.push(item);
     updateCartItemCount();
     saveCartToLocalStorage();
 }
 
+//
 function updateCartItemCount() {
     cartItemsElement.innerHTML = cart.length;
 }
 
+//Записує у стрінгу все, що є в массиві [cart], якщо він порожній то просто створює новий з порожнього
+//Якщо ж в ньому вже є елементи с попередньої сесії - то він дозаписується новими елементами  
 function saveCartToLocalStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
@@ -103,8 +109,8 @@ function renderCart() {
             let title = document.createElement('div');
             title.classList.add('cart-item-title');
             title.innerText = item.title;
-            cartItem.appendChild(title);
-            cartContentElement.appendChild(cartItem);
+            cartItem.append(title);
+            cartContentElement.append(cartItem);
         });
     }
 }
