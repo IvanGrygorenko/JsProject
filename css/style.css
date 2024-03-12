@@ -1,0 +1,118 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #000;
+    font-size: 16px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.card {
+    border: 0.5px solid gray;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+}
+
+.card__img {
+    width: 100%;
+    display: block;
+}
+
+.card__content {
+    padding: 10px;
+}
+
+.card__title {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.card__rate {
+    color: green;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.card__price {
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+}
+
+.cart-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: lightblue;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cart-items {
+    position: fixed;
+    top: 30px;
+    right: 70px;
+    background-color: green;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cart {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    max-width: 400px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+}
+
+.cart-item {
+    margin-bottom: 10px;
+}
+
+.cart-item-title {
+    font-weight: bold;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
