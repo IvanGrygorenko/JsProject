@@ -72,6 +72,20 @@ body {
     cursor: pointer;
 }
 
+.cart-user {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: lightblue;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
 .cart-items {
     position: fixed;
     top: 30px;
