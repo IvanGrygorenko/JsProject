@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            border: 0.5px solid gray;
+            border-radius: 5px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card__img {
+            width: 100%;
+            display: block;
+        }
+
+        .card__content {
+            padding: 10px;
+        }
+
+        .card__title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .card__rate {
+            color: green;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .card__price {
+            font-size: 16px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .cart-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: lightblue;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            position: fixed;
+            top: 30px;
+            right: 70px;
+            background-color: green;
+            color: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cart {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            max-width: 400px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .cart-item {
+            margin-bottom: 20px;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <main class="main">
+        </main>
+    </div>
+    <div class="cart-icon">
+        🛒
+    </div>
+    <div class="cart-items">0</div>
+
+    <div class="cart">
+        <div class="close-btn">X</div>
+        <h1>Корзина</h1>
+        <div class="cartContent"></div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];     //робимо порожній масив,але з перевіркою(беремо ключ cart з локарстореджа або порожній масив)
+        let cartItemsElement = document.querySelector('.cart-items');  //це зрозуміло)
+        let cartContentElement = document.querySelector('.cartContent');
+        let cartElement = document.querySelector('.cart');
+        let cartIcon = document.querySelector('.cart-icon');
+        let closeBtn = document.querySelector('.close-btn');
+
+        cartIcon.addEventListener('click', showCart);// робимо по кліку по корзині показ її
+        closeBtn.addEventListener('click', hideCart);// те саме тільки ховаємо
+
+        function showAll() {
+            fetch('https://fakestoreapi.com/products')
+                .then(data => data.json())
+                .then(data => render(data))
+        }
+        showAll() // виводимо з апі данні  та передаєм в функцію Render
+
+        function render(data) {
+            let main = document.querySelector('.main');
+            main.innerHTML = ''; // очищаєм
+            data.map(item => {
+                let div = createItem(item);
+                main.append(div);
+            });// функція бере данні з data,і потім запускає та підставляє їх в createItem і заливає в мейн
+        }
+
+        function createItem(item) {
+            let div = document.createElement('div');
+            div.classList.add('card');
+
+            let img = document.createElement('img');
+            img.classList.add('card__img');
+            img.src = item.image;
+
+            let content = document.createElement('div');
+            content.classList.add('card__content');
+
+            let h2 = document.createElement('h2');
+            h2.classList.add('card__title');
+            h2.innerHTML = item.title;
+
+            let h5Rating = document.createElement('h5');
+            h5Rating.classList.add('card__rate');
+            h5Rating.innerHTML = 'Рейтинг ' + item.rating.rate;
+
+            let h5Count = document.createElement('h5');
+            h5Count.classList.add('card__rate');
+            h5Count.innerHTML = 'Кількість ' + item.rating.count;
+
+            let h4Price = document.createElement('h4');
+            h4Price.classList.add('card__price');
+            h4Price.innerHTML = 'Ціна ' + item.price;
+
+            let cartIcon = document.createElement('div');
+            cartIcon.classList.add('cart-icon-small');
+            cartIcon.innerHTML = '🛒';
+            cartIcon.addEventListener('click', () => {
+                addToCart(item);// по кліку додаєм в корзину
+            })
+
+            content.append(h2, h5Rating, h5Count, h4Price, cartIcon);
+            div.append(img, content);
+
+            return div;// створюємо класи,елементи і заливаєм їх та виводимо
+        }
+
+        function addToCart(item) {
+            cart.push(item);// додаєм в корзину
+            updateCartItemCount();// оновлюєм лічильник доданих товарів
+            saveCartToLocalStorage();// записуєм в локалсторедж
+        }
+
+        function updateCartItemCount() {
+            cartItemsElement.innerHTML = cart.length;// виводимо довжину масиву як кількість товарів в корзині
+        }
+
+        function saveCartToLocalStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));// записуєм в локарсторедж
+        }
+
+        function showCart() {
+            renderCart();//рендоримо корзину
+            cartElement.style.display = 'block';// показуємо її
+        }
+
+        function hideCart() {
+            cartElement.style.display = 'none';// навпаки ховаємо
+        }
+
+        function renderCart() {
+            cartContentElement.innerHTML = ''; // очищуємо всі елементи cartContent
+            if (cart.length === 0) {
+                cartContentElement.innerHTML = 'Корзина порожня'; // якщо довжина масиву 0 - корзина порожня
+            } else {
+                cart.map(item => {
+                    let cartItem = document.createElement('div');
+                    cartItem.classList.add('cart-item');
+                    let title = document.createElement('div');
+                    title.classList.add('cart-item-title');
+                    title.innerHTML = item.title;
+                    cartItem.append(title);
+                    cartContentElement.append(cartItem);
+                });// виводимо назву продукту в корзину
+            }
+        }
+        updateCartItemCount();// оновлюємо лічильник
+    </script>
+</body>
+
+</html>
