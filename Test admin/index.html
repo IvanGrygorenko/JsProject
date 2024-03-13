@@ -55,15 +55,15 @@
 
     <form class="admin-form">
         <label for="name">Name:</label>
-        <input type="text" id="name" required><br><br>
+        <input type="text" class="name" id="name"><br><br>
 
         <label for="surname">Surname:</label>
-        <input type="text" id="surname" required><br><br>
+        <input type="text" class="surname" id="surname"><br><br>
 
         <label for="age">Age:</label><br>
-        <input id="age" type="number" required><br><br>
+        <input id="age" class="age" type="number"><br><br>
 
-        <button class="add">Add person</button>
+        <button type="button" class="add">Add person</button>
 
         <div class="close-btn">X</div>
     </form>
@@ -105,28 +105,32 @@
             },
         ]
 
+        let newArr = []
+
         function createObj() {
-            const name = document.getElementById('name').value;
-            const surname = document.getElementById('surname').value;
-            const age = document.getElementById('age').value;
+            const name = document.querySelector('.name');
+            const surname = document.querySelector('.surname');
+            const age = document.querySelector('.age');
 
             // Создаем объект с данными товара
             const newPerson = {
-                name: name,
-                surName: surname,
-                age: +age
+                name: name.value,
+                surName: surname.value,
+                age: +age.value
             }
 
-            return newPerson
+            newArr.push(newPerson)
+
+            name.value = ''
+            surname.value = ''
+            age.value = ''
+
+            console.log(newArr);
         }
         
-        let newArr = []
-
         addBtn.addEventListener('click', () => {
-
-            const newPerson = createObj() // Вызываем функцию и сохраняем обновленный массив
-            newArr.push(newPerson)
-            console.log(newArr);
+            createObj() // Вызываем функцию и сохраняем обновленный массив
+            console.log('hi'); 
         })
         
 
