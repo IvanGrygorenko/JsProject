@@ -1,165 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
     <style>
-        .cart-user {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background-color: lightblue;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+      .cart-user {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: lightblue;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
 
-        .admin-form {
-            width: 400px;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: aquamarine;
-        }
+      .admin-form {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: aquamarine;
+      }
 
-        .people-list {
-            margin-top: 200px;
-        }
+      .people-list {
+        margin-top: 200px;
+      }
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            cursor: pointer;
-        }
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-
-    <div class="cart-user">
-        👨‍⚖️
-    </div>
+  <body>
+    <div class="cart-user">👨‍⚖️</div>
 
     <form class="admin-form">
-        <label for="name">Name:</label>
-        <input type="text" class="name" id="name"><br><br>
+      <label for="name">Name:</label>
+      <input type="text" class="name" id="name" /><br /><br />
 
-        <label for="surname">Surname:</label>
-        <input type="text" class="surname" id="surname"><br><br>
+      <label for="surname">Surname:</label>
+      <input type="text" class="surname" id="surname" /><br /><br />
 
-        <label for="age">Age:</label><br>
-        <input id="age" class="age" type="number"><br><br>
+      <label for="age">Age:</label><br />
+      <input id="age" class="age" type="number" /><br /><br />
 
-        <button type="button" class="add">Add person</button>
+      <button type="button" class="add">Add person</button>
 
-        <div class="close-btn">X</div>
+      <div class="close-btn">X</div>
     </form>
 
-    <ul class="people-list">
-
-    </ul>
-
+    <ul class="people-list"></ul>
+    <ul class="people-list1"></ul>
 
     <script>
+      let adminBtn = document.querySelector(".cart-user");
+      let adminPanelCloseBtn = document.querySelector(".close-btn");
+      let peopleList = document.querySelector(".people-list");
+      let newPeopleList = document.querySelector(".people-list1");
+      let adminForm = document.querySelector(".admin-form");
 
-        let adminBtn = document.querySelector('.cart-user')
-        let adminPanelCloseBtn = document.querySelector('.close-btn')
-        let peopleList = document.querySelector('.people-list')
-        let adminForm = document.querySelector('.admin-form')
+      let addBtn = document.querySelector(".add");
 
-        let addBtn = document.querySelector('.add')
+      let startArray = [
+        {
+          name: "Alex",
+          surName: "Iordanov",
+          age: 26,
+        },
+        {
+          name: "Ivan",
+          surName: "Grigorenko",
+          age: 27,
+        },
+        {
+          name: "Vlad",
+          surName: "Paramey",
+          age: 24,
+        },
+        {
+          name: "Natali",
+          surName: "Niedova",
+          age: 37,
+        },
+      ];
 
-        let startArray = [
-            {
-                name: 'Alex',
-                surName: 'Iordanov',
-                age: 26
-            },
-            {
-                name: 'Ivan',
-                surName: 'Grigorenko',
-                age: 27
-            },
-            {
-                name: 'Vlad',
-                surName: 'Paramey',
-                age: 24
-            },
-            {
-                name: 'Natali',
-                surName: 'Niedova',
-                age: 37
-            },
-        ]
+      let newArr = [];
 
-        let newArr = []
+      function createObj() {
+        const name = document.querySelector(".name");
+        const surname = document.querySelector(".surname");
+        const age = document.querySelector(".age");
 
-        function createObj() {
-            const name = document.querySelector('.name');
-            const surname = document.querySelector('.surname');
-            const age = document.querySelector('.age');
+        // Создаем объект с данными товара
+        const newPerson = {
+          name: name.value,
+          surName: surname.value,
+          age: +age.value,
+        };
 
-            // Создаем объект с данными товара
-            const newPerson = {
-                name: name.value,
-                surName: surname.value,
-                age: +age.value
-            }
+        newArr.push(newPerson);
 
-            newArr.push(newPerson)
+        name.value = "";
+        surname.value = "";
+        age.value = "";
 
-            name.value = ''
-            surname.value = ''
-            age.value = ''
+        console.log(newArr);
+        localStorage.setItem("addGoods", JSON.stringify(newArr));
+    }
+    
+    addBtn.addEventListener("click", () => {
+        createObj(); // Вызываем функцию и сохраняем обновленный массив
+        addPersonsArr = JSON.parse(localStorage.getItem("addGoods"));
+        console.log(addPersonsArr);
+        pereporArray(addPersonsArr)
+      });
 
-            console.log(newArr);
-        }
-        
-        addBtn.addEventListener('click', () => {
-            createObj() // Вызываем функцию и сохраняем обновленный массив
-            console.log('hi'); 
-        })
-        
+      //   function saveToLS(newArr) {
+      //     localStorage.setItem("addGoods", JSON.stringify(newArr));
+      //   }
 
-        function pereporArray(startArray) {
-            startArray.map(item => {
-                peopleList.append(createCard(item))
-            })
-        }
+      //   function parseFromLS() {
+      //     let addPersonsArr = JSON.parse(localStorage.getItem("allGoods"));
+      //   }
 
-        function createCard(item) {
-            let li = document.createElement('li')
+      function pereporArray(startArray) {
+        startArray.map(item => {
+          peopleList.append(createCard(item));
+        });
+      }
 
-            let spanName = document.createElement('span')
-            spanName.innerHTML = `Name: ${item.name};`
+      function createCard(item) {
+        let li = document.createElement("li");
 
-            let spanSurName = document.createElement('span')
-            spanSurName.innerHTML = `Surname: ${item.surName};`
+        let spanName = document.createElement("span");
+        spanName.innerHTML = `Name: ${item.name};`;
 
-            let spanAge = document.createElement('span')
-            spanAge.innerHTML = `Age: ${item.age};`
+        let spanSurName = document.createElement("span");
+        spanSurName.innerHTML = `Surname: ${item.surName};`;
 
-            li.append(spanName, spanSurName, spanAge)
+        let spanAge = document.createElement("span");
+        spanAge.innerHTML = `Age: ${item.age};`;
 
-            return li
-        }
+        li.append(spanName, spanSurName, spanAge);
 
-        pereporArray(startArray)
+        return li;
+      }
 
+      pereporArray(startArray);
     </script>
-</body>
-
+  </body>
 </html>

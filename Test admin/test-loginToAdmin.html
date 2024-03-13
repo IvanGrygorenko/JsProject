@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input class="login" type="text" />
+    <input class="password" type="text" />
+    <button class="loginbtn">login</button>
+
+    <script>
+      let login = document.querySelector(".login");
+      let password = document.querySelector(".password");
+      let loginbtn = document.querySelector(".loginbtn");
+      loginbtn.addEventListener("click", () => {
+        loginAccess();
+      });
+
+      let passWordsArr = [
+        {
+          login: "alex1001",
+          password: "admin",
+        },
+        {
+          login: "vlad10",
+          password: "12",
+        },
+        {
+          login: "lenior",
+          password: "1212",
+        },
+        {
+          login: "natali15",
+          password: "1234",
+        },
+      ];
+
+      function loginAccess() {
+        const enteredLogin = login.value;
+        const enteredPassword = password.value;
+
+        for (let i = 0; i < passWordsArr.length; i++) {
+          const user = passWordsArr[i];
+          // Если логин и пароль совпадают с данными из массива, выводим 'hi user' и выходим из функции
+          if (user.login === enteredLogin && user.password === enteredPassword) {
+            console.log("hi user");
+            return; // Выходим из функции, чтобы избежать дополнительных проверок
+          }
+        }
+
+        if (enteredLogin === "alex1001" && enteredPassword === "admin") {
+          console.log("hi admin");
+        } else {
+          // Если ни одно из условий не выполнено, значит введены неверные данные
+          console.log("Invalid login or password");
+        }
+      }
+    </script>
+  </body>
+</html>
