@@ -22,7 +22,7 @@
 
       .admin-form {
         width: 400px;
-        display: flex;
+        display: none;
         flex-direction: column;
         padding: 20px;
         position: fixed;
@@ -68,7 +68,15 @@
 
     <script>
       let adminBtn = document.querySelector(".cart-user");
+      adminBtn.addEventListener('click', () => {
+        adminForm.style.display = 'flex'
+      })
+
       let adminPanelCloseBtn = document.querySelector(".close-btn");
+      adminPanelCloseBtn.addEventListener('click', () => {
+        adminForm.style.display = 'none'
+      })
+
       let peopleList = document.querySelector(".people-list");
       let newPeopleList = document.querySelector(".people-list1");
       let adminForm = document.querySelector(".admin-form");
@@ -122,6 +130,7 @@
         localStorage.setItem("addGoods", JSON.stringify(newArr));
     }
     
+    //Записується у масив кожного разу завжди увесь масив із новими об'єктами
     addBtn.addEventListener("click", () => {
         createObj(); // Вызываем функцию и сохраняем обновленный массив
         addPersonsArr = JSON.parse(localStorage.getItem("addGoods"));
